@@ -1,78 +1,55 @@
-# 🚀 Gin API Generator
+# Gin API Generator v2.0
 
-Generador de proyectos API REST con Go, Gin Framework, sqlc, PostgreSQL y arquitectura limpia. Crea scaffolding completo con best practices, migraciones de base de datos, hot-reload y herramientas de desarrollo profesionales.
+Generador CLI que crea proyectos API REST completos con **Go**, **Gin Framework**, **sqlc**, **PostgreSQL** y arquitectura **Domain-Driven Design (DDD)**. Incluye wizard interactivo, features opcionales y scaffolding profesional.
 
-## 📋 Tabla de Contenidos
+## Novedades v2.0
 
-- [Características](#-características)
-- [Requisitos Previos](#-requisitos-previos)
-- [Instalación](#-instalación)
-- [Uso Rápido](#-uso-rápido)
-- [Comandos Disponibles](#-comandos-disponibles)
-- [Estructura del Proyecto](#-estructura-del-proyecto-generado)
-- [Flujo de Trabajo Completo](#-flujo-de-trabajo-completo)
-- [Ejemplos Prácticos](#-ejemplos-prácticos)
-- [Makefile - Comandos de Desarrollo](#-makefile---comandos-de-desarrollo)
-- [Arquitectura](#-arquitectura)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [FAQ](#-preguntas-frecuentes)
+- **Wizard Interactivo** - Configura tu proyecto paso a paso con prompts intuitivos
+- **Arquitectura DDD** - Estructura Domain-Driven Design con separación clara de capas
+- **Features Opcionales** - JWT, Swagger, CORS, Rate Limiting, Health Checks, Logging estructurado, Docker multi-stage
+- **Comando Quick** - Generación rápida sin prompts para CI/CD o scripts
+- **Documentación en Español** - README generado en español
 
-## ✨ Características
+## Tabla de Contenidos
 
-- 🏗️ **Clean Architecture** - Separación clara en capas (Controller → Service → Repository → Entity)
-- 🔒 **Type-Safe SQL** - Generación de código Go type-safe con **sqlc** desde queries SQL
-- 📊 **Migraciones Automáticas** - Control de versiones de base de datos con **golang-migrate** (up/down)
-- 🔥 **Hot Reload** - Desarrollo ágil con recarga automática usando **Air**
-- 🐳 **Docker Ready** - `docker-compose.yml` incluido para PostgreSQL
-- 📦 **Makefile Completo** - Más de 30 comandos para desarrollo, testing y despliegue
-- 🎯 **Generación Modular** - Crea nuevos módulos completos con un solo comando
-- 🛠️ **Variables de Entorno** - Configuración flexible con `.env` y godotenv
-- 🗄️ **PostgreSQL** - Soporte completo para PostgreSQL 13+
-- 📝 **Documentación** - README.md detallado generado automáticamente
+- [Requisitos](#requisitos)
+- [Instalación](#instalación)
+- [Comandos Disponibles](#comandos-disponibles)
+- [Uso](#uso)
+  - [Wizard Interactivo](#1-wizard-interactivo-init)
+  - [Generación Rápida](#2-generación-rápida-quick)
+  - [Agregar Módulos](#3-agregar-módulos-module)
+- [Estructura DDD Generada](#estructura-ddd-generada)
+- [Features Opcionales](#features-opcionales)
+- [Makefile - Comandos de Desarrollo](#makefile---comandos-de-desarrollo)
+- [Arquitectura DDD](#arquitectura-ddd)
+- [FAQ](#preguntas-frecuentes)
 
-## 📋 Requisitos del Sistema
+## Requisitos
 
 ### Para usar el generador
 
-| Herramienta | Versión Mínima | Propósito | Instalación |
-|-------------|----------------|-----------|-------------|
-| **Bash** | 4.0+ | Ejecutar el script generador | Preinstalado en Linux/macOS |
-| **Git** | 2.0+ | Control de versiones | [git-scm.com](https://git-scm.com) |
+| Herramienta | Versión | Propósito |
+|-------------|---------|-----------|
+| **Bash** | 4.0+ | Ejecutar el script |
+| **Git** | 2.0+ | Control de versiones |
 
 ### Para los proyectos generados
 
-| Herramienta | Versión Mínima | Requerido | Propósito | Instalación |
-|-------------|----------------|-----------|-----------|-------------|
-| **Go** | 1.21+ | ✅ Sí | Lenguaje de programación | [golang.org/dl](https://golang.org/dl/) |
-| **PostgreSQL** | 13+ | ✅ Sí | Base de datos | [postgresql.org/download](https://www.postgresql.org/download/) |
-| **Make** | 3.8+ | ✅ Sí | Automatización de tareas | Preinstalado en Linux/macOS, Windows: [Chocolatey](https://chocolatey.org/) |
-| **sqlc** | 1.20+ | ⚙️ Auto | Generador de código SQL type-safe | Se instala con `make install-tools` |
-| **golang-migrate** | 4.15+ | ⚙️ Auto | Gestor de migraciones | Se instala con `make install-tools` |
-| **Air** | 1.40+ | ⚙️ Auto | Hot-reload para desarrollo | Se instala con `make install-tools` |
-| **Docker** | 20.0+ | 📦 Opcional | PostgreSQL en contenedor | [docker.com](https://www.docker.com/products/docker-desktop) |
+| Herramienta | Versión | Requerido | Instalación |
+|-------------|---------|-----------|-------------|
+| **Go** | 1.21+ | ✅ Sí | [golang.org/dl](https://golang.org/dl/) |
+| **PostgreSQL** | 13+ | ✅ Sí | [postgresql.org](https://www.postgresql.org/download/) |
+| **Make** | 3.8+ | ✅ Sí | Preinstalado en Linux/macOS |
+| **sqlc** | 1.20+ | ⚙️ Auto | `make install-tools` |
+| **golang-migrate** | 4.15+ | ⚙️ Auto | `make install-tools` |
+| **Air** | 1.40+ | ⚙️ Auto | `make install-tools` |
+| **Docker** | 20.0+ | 📦 Opcional | [docker.com](https://www.docker.com) |
 
-> **Nota:** Las herramientas marcadas como "⚙️ Auto" se instalan automáticamente al ejecutar `make setup` o `make install-tools` en el proyecto generado.
-
-### Verificación rápida
+## Instalación
 
 ```bash
-# Verificar Go
-go version  # Debe mostrar 1.21 o superior
-
-# Verificar PostgreSQL
-psql --version  # Debe mostrar 13 o superior
-
-# Verificar Make
-make --version  # Debe mostrar 3.8 o superior
-
-# Verificar Git
-git --version
-```
-
-## 🚀 Instalación del Generador
-
-```bash
-# Clonar el repositorio
+# Clonar repositorio
 git clone https://github.com/eondev-inc/gin-generator.git
 cd gin-generator
 
@@ -83,131 +60,114 @@ chmod +x gen-init.sh
 sudo cp gen-init.sh /usr/local/bin/gin-gen
 ```
 
-Si instalas globalmente, usa `gin-gen` en lugar de `./gen-init.sh`
+## Comandos Disponibles
 
-## ⚡ Inicio Rápido
+| Comando | Descripción |
+|---------|-------------|
+| `./gen-init.sh init` | Wizard interactivo para crear proyecto |
+| `./gen-init.sh quick <nombre> [modulo]` | Generación rápida sin prompts |
+| `./gen-init.sh module <nombre>` | Agregar módulo DDD al proyecto |
+| `./gen-init.sh generate` | Regenerar código sqlc |
+| `./gen-init.sh help` | Mostrar ayuda |
 
-### 1. Generar nuevo proyecto
+## Uso
+
+### 1. Wizard Interactivo (`init`)
+
+El wizard te guía paso a paso para configurar tu proyecto:
+
+```bash
+./gen-init.sh init
+```
+
+**Pasos del wizard:**
+
+1. **Nombre del proyecto** - Nombre de la carpeta (ej: `mi-api`)
+2. **Módulo Go** - Path del módulo (ej: `github.com/usuario/mi-api`)
+3. **Puerto del servidor** - Puerto HTTP (default: `8080`)
+4. **Base de datos** - Nombre de la BD PostgreSQL
+5. **Features opcionales** - Selección interactiva de características
+
+**Ejemplo de sesión:**
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║                   GIN API GENERATOR v2.0                      ║
+║           Generador de APIs REST con Go y Gin                 ║
+╚══════════════════════════════════════════════════════════════╝
+
+📦 Nombre del proyecto: mi-ecommerce-api
+📦 Nombre del módulo Go [github.com/user/mi-ecommerce-api]: 
+🌐 Puerto del servidor [8080]: 3000
+🗄️  Nombre de la base de datos [mi_ecommerce_api_db]: ecommerce_db
+
+🔧 Selecciona las features que deseas incluir:
+
+   [1] JWT Authentication     - Autenticación con JSON Web Tokens
+   [2] Swagger/OpenAPI        - Documentación automática de la API
+   [3] CORS Middleware        - Cross-Origin Resource Sharing
+   [4] Rate Limiting          - Límite de peticiones por IP
+   [5] Health Checks          - Endpoints /health y /ready
+   [6] Structured Logging     - Logging con slog (JSON/text)
+   [7] Docker Multi-stage     - Dockerfile optimizado para producción
+
+Ingresa los números separados por espacio (ej: 1 3 5) o 'all' para todos:
+> 1 3 5 6
+
+✅ Proyecto 'mi-ecommerce-api' creado exitosamente!
+```
+
+### 2. Generación Rápida (`quick`)
+
+Para scripts, CI/CD o cuando ya conoces la configuración:
 
 ```bash
 # Sintaxis
-./gen-init.sh init <go_module_name>
+./gen-init.sh quick <nombre_proyecto> [modulo_go]
 
-# Ejemplo
-./gen-init.sh init github.com/miuser/mi-api
+# Ejemplos
+./gen-init.sh quick mi-api
+./gen-init.sh quick mi-api github.com/empresa/mi-api
 ```
 
-### 2. Configurar entorno
+Genera un proyecto con configuración por defecto:
+- Puerto: 8080
+- Features: CORS, Health Checks, Logging
+- Módulo user de ejemplo
+
+### 3. Agregar Módulos (`module`)
+
+Dentro de un proyecto existente, agrega nuevos módulos DDD:
 
 ```bash
-cd mi-api
-
-# Copiar variables de entorno
-cp .env.example .env
-
-# Editar .env con tus credenciales de PostgreSQL
-nano .env  # o usar tu editor preferido
-```
-
-**Ejemplo de `.env`:**
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=tu_password
-DB_NAME=mi_api_db
-SERVER_PORT=8080
-```
-
-### 3. Levantar el proyecto
-
-```bash
-# Opción A: Setup completo automatizado (recomendado para primera vez)
-make setup
-# Instala herramientas (sqlc, migrate, air)
-# Crea la base de datos
-# Ejecuta migraciones
-# Genera código sqlc
-
-# Opción B: Si PostgreSQL está en Docker
-make docker-up     # Levanta PostgreSQL en contenedor
-make migrate-up    # Ejecuta migraciones
-make sqlc-generate # Genera código
-
-# Iniciar servidor con hot-reload
-make dev
-```
-
-**¡Listo!** Tu API está corriendo en `http://localhost:8080` 🎉
-
-### Verificar que funciona
-
-```bash
-# Obtener todos los usuarios
-curl http://localhost:8080/api/v1/users
-
-# Crear un usuario
-curl -X POST http://localhost:8080/api/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{"name":"John Doe","email":"john@example.com"}'
-```
-
-## 📚 Comandos Disponibles
-
-### 1. `init` - Crear nuevo proyecto
-
-```bash
-./gen-init.sh init <go_module_name>
-```
-
-**Descripción:** Inicializa un nuevo proyecto completo con toda la estructura base.
-
-**Ejemplo:**
-```bash
-./gen-init.sh init github.com/acme/ecommerce-api
+cd mi-proyecto
+../gen-init.sh module product
 ```
 
 **Genera:**
-- Estructura de carpetas completa
-- Módulo Go inicializado
-- Módulo de ejemplo (users) con CRUD
-- Archivos de configuración
-- Makefile con comandos
-- Docker Compose para MySQL
-- Migraciones iniciales
-- README.md del proyecto
 
-### 2. `module` - Agregar nuevo módulo
-
-```bash
-./gen-init.sh module <nombre_modulo>
 ```
-
-**Descripción:** Genera un nuevo módulo dentro del proyecto existente.
-
-**Ejemplo:**
-```bash
-./gen-init.sh module product
-```
-
-**Genera para el módulo:**
-```
-internal/product/
-├── controller/controller.go   # Handlers HTTP
-├── dto/create_product_dto.go  # Data Transfer Objects
-├── entity/product.go           # Entidad de dominio
-├── repository/repository.go    # Capa de datos con sqlc
-└── service/service.go          # Lógica de negocio
+internal/
+├── domain/product/
+│   ├── entity.go           # Entidad Product
+│   ├── repository.go       # Interface ProductRepository
+│   └── errors.go           # Errores de dominio
+├── application/product/
+│   ├── service.go          # ProductService
+│   └── dto.go              # CreateProductDTO, UpdateProductDTO
+└── infrastructure/persistence/postgres/
+    └── product_repository.go  # Implementación del repositorio
 
 sql/
-├── schema/product.sql          # DDL del schema
-├── queries/product.sql         # Queries SQL para sqlc
+├── schema/product.sql
+├── queries/product.sql
 └── migrations/
     ├── 000002_create_products_table.up.sql
     └── 000002_create_products_table.down.sql
 ```
 
-**Siguientes pasos:**
+**Post-generación:**
+
 ```bash
 # Regenerar código sqlc
 make sqlc-generate
@@ -215,491 +175,314 @@ make sqlc-generate
 # Aplicar migraciones
 make migrate-up
 
-# Registrar rutas en internal/router/router.go
-# (Agregar manualmente las rutas del nuevo módulo)
+# Registrar rutas en router (manual)
 ```
 
-### 3. `generate` - Generar código sqlc
-
-```bash
-./gen-init.sh generate
-```
-
-**Descripción:** Ejecuta `sqlc generate` para crear código Go desde tus queries SQL.
-
-**Cuándo usar:**
-- Después de modificar archivos `.sql` en `sql/queries/`
-- Después de crear un nuevo módulo
-- Después de cambiar `sqlc.yaml`
-
-**Valida:**
-- ✅ Que sqlc esté instalado
-- ✅ Que exista `sqlc.yaml`
-- ✅ Que las queries SQL sean válidas
-
-## 🏗️ Estructura del Proyecto Generado
+## Estructura DDD Generada
 
 ```
-mi-api/
+mi-proyecto/
 ├── cmd/
 │   └── api/
-│       └── main.go                    # Entry point de la aplicación
+│       └── main.go                         # Entry point con graceful shutdown
 │
-├── internal/                          # Código privado de la aplicación
-│   ├── config/
-│   │   └── config.go                  # Configuración (env vars con godotenv)
+├── internal/
+│   ├── domain/                             # 🎯 CAPA DE DOMINIO
+│   │   └── user/
+│   │       ├── entity.go                   # Entidad User (reglas de negocio)
+│   │       ├── repository.go               # Interface UserRepository
+│   │       └── errors.go                   # ErrUserNotFound, ErrUserExists
 │   │
-│   ├── database/
-│   │   └── postgres.go                # Conexión a PostgreSQL
+│   ├── application/                        # 📋 CAPA DE APLICACIÓN
+│   │   └── user/
+│   │       ├── service.go                  # UserService (casos de uso)
+│   │       └── dto.go                      # CreateUserDTO, UpdateUserDTO
 │   │
-│   ├── router/
-│   │   └── router.go                  # Definición de rutas HTTP
+│   ├── infrastructure/                     # 🔧 CAPA DE INFRAESTRUCTURA
+│   │   ├── config/
+│   │   │   └── config.go                   # Carga de variables de entorno
+│   │   └── persistence/
+│   │       └── postgres/
+│   │           ├── connection.go           # Pool de conexiones PostgreSQL
+│   │           └── user_repository.go      # Implementación UserRepository
 │   │
-│   └── user/                          # Módulo de ejemplo
-│       ├── controller/
-│       │   └── controller.go          # Handlers HTTP (FindAll, FindByID, Create)
-│       ├── dto/
-│       │   ├── create_user_dto.go     # DTO para crear usuario
-│       │   └── update_user_dto.go     # DTO para actualizar usuario
-│       ├── entity/
-│       │   └── user.go                # Entidad de dominio User
-│       ├── repository/
-│       │   └── repository.go          # Acceso a datos usando sqlc
-│       └── service/
-│           └── service.go             # Lógica de negocio
+│   └── interfaces/                         # 🌐 CAPA DE INTERFACES
+│       └── http/
+│           ├── server/
+│           │   └── server.go               # Configuración del servidor Gin
+│           ├── router/
+│           │   └── router.go               # Definición de rutas
+│           ├── handler/
+│           │   └── user_handler.go         # Handlers HTTP (controllers)
+│           ├── middleware/
+│           │   ├── auth.go                 # JWT middleware (si habilitado)
+│           │   ├── cors.go                 # CORS middleware (si habilitado)
+│           │   ├── ratelimit.go            # Rate limiting (si habilitado)
+│           │   ├── logger.go               # Request logging (si habilitado)
+│           │   └── recovery.go             # Panic recovery
+│           └── response/
+│               └── response.go             # Response wrapper estándar
+│
+├── pkg/                                    # 📦 PAQUETES PÚBLICOS
+│   ├── errors/
+│   │   └── errors.go                       # Errores personalizados (AppError)
+│   ├── jwt/                                # (si JWT habilitado)
+│   │   └── jwt.go                          # Helpers para generar/validar tokens
+│   └── logger/                             # (si logging habilitado)
+│       └── logger.go                       # Setup de slog
 │
 ├── sql/
-│   ├── migrations/                    # Migraciones de base de datos
-│   │   ├── 000001_create_users_table.up.sql
-│   │   └── 000001_create_users_table.down.sql
-│   │
-│   ├── queries/                       # Queries SQL para sqlc
-│   │   └── user.sql                   # Queries: ListUsers, GetUserByID, etc.
-│   │
-│   └── schema/                        # Schemas SQL (referencia)
-│       └── user.sql                   # DDL de la tabla users
+│   ├── migrations/                         # Migraciones up/down
+│   ├── queries/                            # Queries para sqlc
+│   └── schema/                             # DDL de tablas
 │
-├── sqldb/                             # Código generado por sqlc (no editar)
-│   ├── db.go
-│   ├── models.go
-│   ├── querier.go
-│   └── user.sql.go
+├── sqldb/                                  # Código generado por sqlc (no editar)
 │
-├── .devcontainer/                     # 🐳 Configuración DevContainer
-│   ├── devcontainer.json              # Config principal
-│   ├── Dockerfile                     # Imagen con Go + herramientas
-│   ├── docker-compose.yml             # PostgreSQL + app
-│   ├── post-create.sh                 # Script setup automático
-│   └── README.md                      # Documentación DevContainer
-│
-├── .air.toml                          # Configuración hot-reload
-├── .dockerignore                      # Archivos ignorados en builds
-├── .env                               # Variables de entorno (git-ignored)
-├── .env.example                       # Template de variables de entorno
-├── .gitignore                         # Archivos a ignorar en git
-├── docker-compose.yml                 # PostgreSQL en Docker
-├── go.mod                             # Dependencias Go
-├── go.sum
-├── Makefile                           # Comandos de desarrollo
-├── README.md                          # Documentación del proyecto
-└── sqlc.yaml                          # Configuración de sqlc
+├── .air.toml                               # Hot-reload config
+├── .env.example                            # Template de variables
+├── docker-compose.yml                      # PostgreSQL en Docker
+├── Dockerfile                              # (si Docker habilitado) Multi-stage build
+├── Makefile                                # Comandos de desarrollo
+├── sqlc.yaml                               # Configuración sqlc
+└── README.md                               # Documentación en español
 ```
 
-**Nota:** La carpeta `.devcontainer/` contiene todo lo necesario para desarrollo en cualquier SO usando VS Code + Docker.
+## Features Opcionales
 
-## 🔄 Flujo de Trabajo Completo
+### JWT Authentication
 
-### 1️⃣ Crear Proyecto Nuevo
+Cuando habilitas JWT, se genera:
 
-```bash
-# Crear proyecto
-./gen-init.sh init github.com/mycompany/shop-api
+- `pkg/jwt/jwt.go` - Funciones para generar y validar tokens
+- `internal/interfaces/http/middleware/auth.go` - Middleware de autenticación
+- Variables de entorno: `JWT_SECRET`, `JWT_EXPIRATION`
 
-# Entrar al directorio
-cd shop-api
+**Uso:**
 
-# Configurar entorno
-cp .env.example .env
-nano .env  # Editar credenciales
-```
-
-**Archivo `.env`:**
-```env
-DB_USER=root
-DB_PASS=tu_password
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=shop_db
-SERVER_PORT=8080
-```
-
-### 2️⃣ Setup Inicial
-
-```bash
-# Opción A: Setup automático (recomendado)
-make setup
-# Esto ejecuta:
-# - make install-tools (sqlc, migrate, air)
-# - make deps (go mod download)
-# - make db-create (crea la BD)
-# - make migrate-up (aplica migraciones)
-# - make sqlc-generate (genera código)
-
-# Opción B: Manual paso a paso
-make install-tools
-make deps
-make db-create
-make migrate-up
-make sqlc-generate
-```
-
-### 3️⃣ Desarrollo
-
-```bash
-# Iniciar con hot-reload (recomendado)
-make dev
-
-# O ejecutar directamente
-make run
-
-# O compilar y ejecutar
-make build
-./bin/api
-```
-
-### 4️⃣ Probar API
-
-```bash
-# Listar usuarios
-curl http://localhost:8080/api/users
-
-# Obtener usuario por ID
-curl http://localhost:8080/api/users/1
-
-# Crear usuario
-curl -X POST http://localhost:8080/api/users \
-  -H "Content-Type: application/json" \
-  -d '{"name": "John Doe", "email": "john@example.com"}'
-```
-
-### 5️⃣ Agregar Nuevo Módulo (Productos)
-
-```bash
-# Generar módulo
-./gen-init.sh module product
-
-# Regenerar código sqlc
-make sqlc-generate
-
-# Aplicar migraciones
-make migrate-up
-```
-
-**Editar `internal/router/router.go`:**
 ```go
-import (
-    // ... imports existentes
-    productController "yourmodule/internal/product/controller"
-    productRepository "yourmodule/internal/product/repository"
-    productService "yourmodule/internal/product/service"
-)
+// Generar token
+token, err := jwt.GenerateToken(userID, email)
 
-func NewRouter(db *sql.DB) *gin.Engine {
-    r := gin.Default()
-
-    // ... código existente (users)
-
-    // Agregar módulo de productos
-    productRepo := productRepository.NewProductRepository(db)
-    productSvc := productService.NewProductService(productRepo)
-    productCtrl := productController.NewProductController(productSvc)
-
-    api := r.Group("/api")
-    {
-        products := api.Group("/products")
-        {
-            products.GET("", productCtrl.FindAll)
-            // Agregar más rutas según necesites
-        }
-    }
-
-    return r
+// Proteger rutas
+authorized := router.Group("/api/v1")
+authorized.Use(middleware.AuthMiddleware())
+{
+    authorized.GET("/profile", handler.GetProfile)
 }
 ```
 
-### 6️⃣ Personalizar Queries
+### Swagger/OpenAPI
 
-**Editar `sql/queries/product.sql`:**
-```sql
--- name: GetProductsByCategory :many
-SELECT id, name, category, price, created_at, updated_at
-FROM products
-WHERE category = ?
-ORDER BY created_at DESC;
+Genera documentación automática con [swaggo/swag](https://github.com/swaggo/swag):
 
--- name: GetProductsInStock :many
-SELECT id, name, stock, price
-FROM products
-WHERE stock > 0;
-```
-
-**Regenerar código:**
 ```bash
-make sqlc-generate
+# Generar docs
+make swagger
+
+# Acceder
+http://localhost:8080/swagger/index.html
 ```
 
-**Usar en repository:**
+### CORS Middleware
+
+Configuración flexible de CORS:
+
 ```go
-func (r *ProductRepository) FindByCategory(ctx context.Context, category string) ([]entity.Product, error) {
-    products, err := r.queries.GetProductsByCategory(ctx, category)
-    if err != nil {
-        return nil, err
-    }
-    // Convertir y retornar
-}
+// Orígenes permitidos desde .env
+CORS_ORIGINS=http://localhost:3000,https://miapp.com
 ```
 
-## 💡 Ejemplos Prácticos
+### Rate Limiting
 
-### Ejemplo 1: Proyecto de Blog
+Limita peticiones por IP usando token bucket:
 
-```bash
-# Crear proyecto
-./gen-init.sh init github.com/myblog/api
-
-cd api
-cp .env.example .env
-# Editar .env
-
-# Setup
-make setup
-
-# Crear módulos
-./gen-init.sh module post
-./gen-init.sh module comment
-./gen-init.sh module category
-
-# Generar código
-make sqlc-generate
-make migrate-up
-
-# Desarrollar
-make dev
+```go
+// Configuración en .env
+RATE_LIMIT=100        # peticiones por minuto
+RATE_LIMIT_BURST=10   # ráfaga permitida
 ```
 
-### Ejemplo 2: E-commerce API
+### Health Checks
 
-```bash
-# Crear proyecto
-./gen-init.sh init github.com/myshop/backend-api
+Endpoints para Kubernetes/Docker:
 
-cd backend-api
+- `GET /health` - Liveness check
+- `GET /ready` - Readiness check (verifica conexión a BD)
 
-# Usar Docker para MySQL
-make docker-up
+### Structured Logging
 
-# Setup
-make setup
+Logging con `slog` (stdlib Go 1.21+):
 
-# Módulos
-./gen-init.sh module product
-./gen-init.sh module category
-./gen-init.sh module order
-./gen-init.sh module cart
-
-# Generar todo
-make sqlc-generate
-make migrate-up
-make dev
+```go
+// JSON en producción, texto en desarrollo
+LOG_FORMAT=json  # o "text"
+LOG_LEVEL=info   # debug, info, warn, error
 ```
 
-### Ejemplo 3: Agregar Autenticación
+### Docker Multi-stage
 
-```bash
-# Crear módulo de autenticación
-./gen-init.sh module auth
+Dockerfile optimizado:
 
-# Crear migración para tabla de tokens
-make migrate-create name=add_auth_tokens_table
+```dockerfile
+# Build stage
+FROM golang:1.21-alpine AS builder
+# ... compilación
 
-# Editar sql/migrations/000002_add_auth_tokens_table.up.sql
-# Agregar:
-# CREATE TABLE auth_tokens (...)
-
-# Aplicar
-make migrate-up
-
-# Desarrollar en sql/queries/auth.sql
-# Regenerar
-make sqlc-generate
+# Runtime stage
+FROM alpine:3.18
+# Imagen final ~15MB
 ```
 
-## 🛠️ Makefile - Comandos de Desarrollo
+### GitHub Actions CI
 
-### Comandos Generales
+Pipeline completo de CI/CD:
+
+**Workflows generados:**
+
+- `.github/workflows/ci.yml` - Lint, Test, Build, Security scan
+- `.github/workflows/release.yml` - Build y push de imagen Docker (si Docker habilitado)
+- `.github/dependabot.yml` - Actualizaciones automáticas de dependencias
+
+**Jobs del CI:**
+
+| Job | Descripción |
+|-----|-------------|
+| **lint** | Ejecuta golangci-lint |
+| **test** | Tests con PostgreSQL en GitHub Actions |
+| **build** | Compila binario y sube artefacto |
+| **security** | Escaneo con Gosec |
+
+**Triggers:**
+
+- Push a `main`, `master`, `develop`
+- Pull requests a estas ramas
+- Tags `v*` para releases
+
+## Makefile - Comandos de Desarrollo
+
+### Generales
 
 | Comando | Descripción |
 |---------|-------------|
-| `make help` | Muestra todos los comandos disponibles |
-| `make setup` | Setup completo del proyecto |
-| `make dev` | Inicia servidor con hot-reload |
-| `make run` | Ejecuta el servidor |
-| `make build` | Compila el binario |
-| `make test` | Ejecuta tests |
-| `make test-coverage` | Tests con reporte HTML |
-| `make clean` | Limpia archivos generados |
+| `make help` | Muestra todos los comandos |
+| `make setup` | Setup completo (tools + db + migrate + sqlc) |
+| `make dev` | Servidor con hot-reload |
+| `make run` | Ejecutar servidor |
+| `make build` | Compilar binario |
+| `make test` | Ejecutar tests |
+| `make lint` | Ejecutar linter |
 
 ### Base de Datos
 
 | Comando | Descripción |
 |---------|-------------|
-| `make db-create` | Crea la base de datos |
-| `make db-drop` | Elimina la BD (¡con confirmación!) |
+| `make db-create` | Crear base de datos |
+| `make db-drop` | Eliminar base de datos |
 | `make db-reset` | Drop + Create + Migrate |
-| `make db-console` | Abre consola MySQL |
+| `make docker-up` | Iniciar PostgreSQL en Docker |
+| `make docker-down` | Detener contenedores |
 
 ### Migraciones
 
 | Comando | Descripción |
 |---------|-------------|
-| `make migrate-create name=<nombre>` | Crea nueva migración |
-| `make migrate-up` | Aplica todas las migraciones |
-| `make migrate-down` | Revierte última migración |
-| `make migrate-down-all` | Revierte todas (¡CUIDADO!) |
-| `make migrate-force version=N` | Fuerza versión específica |
-| `make migrate-version` | Muestra versión actual |
+| `make migrate-create name=xxx` | Crear nueva migración |
+| `make migrate-up` | Aplicar migraciones |
+| `make migrate-down` | Revertir última migración |
+| `make migrate-version` | Ver versión actual |
 
 ### SQLc
 
 | Comando | Descripción |
 |---------|-------------|
-| `make sqlc-generate` | Genera código Go desde SQL |
-| `make sqlc-verify` | Verifica configuración |
+| `make sqlc-generate` | Generar código Go |
+| `make sqlc-verify` | Verificar configuración |
 
-### Docker
+## Arquitectura DDD
 
-| Comando | Descripción |
-|---------|-------------|
-| `make docker-up` | Inicia MySQL en Docker |
-| `make docker-down` | Detiene contenedores |
-| `make docker-logs` | Muestra logs |
-
-### Herramientas
-
-| Comando | Descripción |
-|---------|-------------|
-| `make install-tools` | Instala sqlc, migrate, air |
-| `make deps` | Instala dependencias Go |
-| `make deps-upgrade` | Actualiza dependencias |
-| `make fmt` | Formatea código |
-| `make lint` | Ejecuta linter |
-
-### Comandos Combinados
-
-| Comando | Descripción |
-|---------|-------------|
-| `make reset-all` | Limpia todo y resetea BD |
-
-## 🏛️ Arquitectura
-
-### Capas del Sistema
+### Capas y Responsabilidades
 
 ```
-┌─────────────────────────────────────┐
-│         HTTP Layer (Gin)            │
-│  Controllers (Handlers, Validation) │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│      Business Logic Layer           │
-│  Services (Domain Logic, Rules)     │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│       Data Access Layer             │
-│  Repositories (sqlc queries)        │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│          Database Layer             │
-│        MySQL + Migrations           │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    INTERFACES (HTTP/gRPC/CLI)                    │
+│  Handlers, Middleware, Response formatting, Input validation    │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        APPLICATION                               │
+│  Services (Use Cases), DTOs, Orquestación de dominio            │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                          DOMAIN                                  │
+│  Entities, Repository interfaces, Domain errors, Value objects  │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      INFRASTRUCTURE                              │
+│  PostgreSQL repos, External APIs, Config, Persistence           │
+└─────────────────────────────────────────────────────────────────┘
 ```
+
+### Principios
+
+1. **Dependency Inversion** - El dominio no depende de infraestructura
+2. **Interface Segregation** - Interfaces pequeñas y específicas
+3. **Single Responsibility** - Cada capa tiene un propósito claro
+4. **Testability** - Fácil de mockear gracias a interfaces
 
 ### Flujo de una Petición
 
 ```
-1. Request HTTP → Gin Router
-2. Router → Controller (valida DTO)
-3. Controller → Service (lógica de negocio)
-4. Service → Repository (queries sqlc)
-5. Repository → Database (MySQL)
-6. Database → Repository (resultados)
-7. Repository → Service (entities)
-8. Service → Controller (entities)
-9. Controller → Response JSON
+HTTP Request
+    │
+    ▼
+Handler (valida input, convierte a DTO)
+    │
+    ▼
+Service (ejecuta caso de uso, lógica de negocio)
+    │
+    ▼
+Repository Interface (definida en domain)
+    │
+    ▼
+Repository Impl (infraestructura, usa sqlc)
+    │
+    ▼
+PostgreSQL
 ```
 
-### Separación Entity vs Model
+## Preguntas Frecuentes
 
-- **Entity** (`internal/*/entity/`): Estructuras de dominio, lógica de negocio
-- **Model** (generado en `sqldb/`): Estructuras de BD generadas por sqlc
-- **DTO** (`internal/*/dto/`): Estructuras para APIs (request/response)
+### ¿Cómo migro de la estructura anterior a DDD?
 
-## 🔧 Tecnologías Utilizadas
+La v2.0 genera proyectos nuevos con estructura DDD. Para proyectos existentes:
 
-| Tecnología | Propósito | Documentación |
-|------------|-----------|---------------|
-| **Go** | Lenguaje de programación | [golang.org](https://golang.org) |
-| **Gin** | Framework HTTP/REST | [gin-gonic.com](https://gin-gonic.com) |
-| **sqlc** | Generador de código SQL type-safe | [sqlc.dev](https://sqlc.dev) |
-| **golang-migrate** | Migraciones de BD | [github.com/golang-migrate](https://github.com/golang-migrate/migrate) |
-| **Air** | Hot reload para desarrollo | [github.com/air-verse/air](https://github.com/air-verse/air) |
-| **PostgreSQL** | Base de datos relacional | [postgresql.org](https://www.postgresql.org) |
-| **godotenv** | Carga variables de entorno desde .env | [github.com/joho/godotenv](https://github.com/joho/godotenv) |
-| **Docker** | Containerización (opcional) | [docker.com](https://www.docker.com) |
+1. Genera un proyecto nuevo con v2.0
+2. Migra tu lógica de negocio a `internal/domain/`
+3. Migra tus servicios a `internal/application/`
+4. Adapta tus handlers a `internal/interfaces/http/handler/`
 
-## ❓ Preguntas Frecuentes
+### ¿Puedo usar MySQL en lugar de PostgreSQL?
 
-### ¿Cómo cambio el puerto del servidor?
+Actualmente el generador está optimizado para PostgreSQL. Para MySQL:
 
-Edita el archivo `.env`:
+1. Modifica `sqlc.yaml` (engine: mysql)
+2. Cambia las queries SQL (sintaxis MySQL)
+3. Actualiza `docker-compose.yml`
+4. Modifica el driver en `connection.go`
 
-```env
-SERVER_PORT=3000
-```
+### ¿Cómo agrego un nuevo endpoint a un módulo existente?
 
-Y actualiza `cmd/api/main.go` para leer esta variable usando `cfg.ServerPort`.
-
-### ¿Las variables de entorno se cargan automáticamente?
-
-Sí. El proyecto generado incluye `github.com/joho/godotenv` que carga automáticamente el archivo `.env` al iniciar la aplicación. Solo necesitas:
-
-1. Copiar `.env.example` a `.env`
-2. Editar las variables según tu configuración
-3. Ejecutar la aplicación con `make dev` o `make run`
-
-### ¿Cómo uso PostgreSQL en lugar de MySQL?
-
-El generador ya está configurado para PostgreSQL por defecto. Incluye:
-
-- ✅ Engine: `postgresql` en `sqlc.yaml`
-- ✅ Driver: `github.com/lib/pq`
-- ✅ Conexión: `NewPostgresConnection` en `database/postgres.go`
-- ✅ Sintaxis SQL: BIGSERIAL, placeholders $1, $2, etc.
-- ✅ Migraciones: Compatible con golang-migrate para PostgreSQL
-- ✅ Docker: PostgreSQL 13 en `docker-compose.yml`
-
-Si prefieres MySQL, debes modificar manualmente estos archivos en tu proyecto generado.
-
-### ¿Cómo agrego autenticación JWT?
-
-1. Instala librería: `go get github.com/golang-jwt/jwt/v5`
-2. Crea middleware en `internal/middleware/auth.go`
-3. Aplica middleware en router para rutas protegidas
+1. Agrega la query en `sql/queries/<modulo>.sql`
+2. Ejecuta `make sqlc-generate`
+3. Actualiza el repository en `internal/infrastructure/persistence/`
+4. Agrega el método en el service `internal/application/<modulo>/`
+5. Crea el handler en `internal/interfaces/http/handler/`
+6. Registra la ruta en `internal/interfaces/http/router/`
 
 ### ¿Cómo ejecuto tests?
 
@@ -710,103 +493,44 @@ make test
 # Con coverage
 make test-coverage
 
-# Test específico
-go test -v ./internal/user/service
+# Tests de un paquete
+go test -v ./internal/application/user/...
 ```
 
-### ¿Qué hago si una migración falla?
+### ¿Cómo despliego en producción?
 
 ```bash
-# Ver estado actual
-make migrate-version
+# Con Docker (recomendado)
+docker build -t mi-api .
+docker run -p 8080:8080 --env-file .env.prod mi-api
 
-# Si está "dirty", forzar versión anterior
-make migrate-force version=1
-
-# Corregir archivo SQL
-# Aplicar de nuevo
-make migrate-up
+# Sin Docker
+make build
+./bin/api
 ```
 
-### ¿Cómo depliego en producción?
+### ¿Puedo personalizar las templates?
 
-```bash
-# 1. Compilar para producción
-GOOS=linux GOARCH=amd64 go build -o api ./cmd/api
+Sí, el script `gen-init.sh` contiene todas las templates. Busca las funciones `generate_*` para modificarlas.
 
-# 2. Copiar binario al servidor
+## Migración desde v1.x
 
-# 3. Crear .env en servidor
+| v1.x | v2.0 |
+|------|------|
+| `./gen-init.sh init <module>` | `./gen-init.sh init` (wizard) |
+| Estructura flat (`internal/<modulo>/`) | Estructura DDD (`domain/`, `application/`, etc.) |
+| Sin features opcionales | JWT, CORS, Rate Limit, etc. |
+| Configuración hardcodeada | Wizard interactivo |
 
-# 4. Aplicar migraciones
-migrate -path sql/migrations -database "mysql://..." up
+## Contribuir
 
-# 5. Ejecutar
-./api
-```
+1. Fork el repositorio
+2. Crea una rama (`git checkout -b feature/nueva-feature`)
+3. Commit tus cambios (`git commit -m 'Agrega nueva feature'`)
+4. Push a la rama (`git push origin feature/nueva-feature`)
+5. Abre un Pull Request
 
-### ¿Puedo personalizar el generador?
-
-¡Sí! El script `gen-init.sh` es completamente editable. Puedes:
-
-- Cambiar estructura de carpetas
-- Modificar templates
-- Agregar más dependencias
-- Personalizar el Makefile generado
-
-### ¿Cómo uso el DevContainer en el proyecto generado?
-
-El DevContainer está incluido en cada proyecto generado:
-
-```bash
-# 1. Genera el proyecto
-./gen-init.sh init github.com/user/mi-api
-cd mi-api
-
-# 2. Abre en VS Code
-code .
-
-# 3. Reabre en Container
-# F1 → "Dev Containers: Reopen in Container"
-
-# 4. Espera ~5-10 min (primera vez)
-
-# 5. Una vez dentro:
-make setup
-make dev
-```
-
-**Requisitos:** Docker Desktop + VS Code con extensión "Dev Containers"
-
-### ¿El DevContainer funciona en Windows?
-
-¡Sí! El DevContainer funciona perfectamente en:
-
-- ✅ Windows 10/11 (con WSL2 + Docker Desktop)
-- ✅ macOS (Intel y Apple Silicon)
-- ✅ Linux (cualquier distribución)
-
-Solo necesitas Docker Desktop y VS Code instalados.
-
-### ¿Qué incluye el DevContainer?
-
-- **Go 1.23** + todas las herramientas (sqlc, migrate, air, golangci-lint)
-- **PostgreSQL 16** en contenedor separado
-- **Extensiones VS Code** preinstaladas (Go, Docker, SQLTools, GitLens)
-- **Zsh + Oh My Zsh** para mejor terminal
-- **Docker-in-Docker** para ejecutar contenedores adicionales
-- **Configuración automática** con script post-create
-
-Ver documentación completa en `.devcontainer/README.md` de cada proyecto generado.
-
-## 📞 Soporte
-
-Si tienes problemas o sugerencias:
-- 🐛 Reporta bugs abriendo un issue
-- 💡 Sugiere features vía pull request
-- 📖 Consulta la documentación de cada tecnología
-
-## 📄 Licencia
+## Licencia
 
 MIT
 
